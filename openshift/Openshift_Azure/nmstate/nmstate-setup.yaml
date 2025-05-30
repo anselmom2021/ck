@@ -1,8 +1,10 @@
+# Create Namespace
 apiVersion: v1
 kind: Namespace
 metadata:
   name: openshift-nmstate
 ---
+# Create OperatorGroup
 apiVersion: operators.coreos.com/v1
 kind: OperatorGroup
 metadata:
@@ -12,12 +14,14 @@ spec:
   targetNamespaces:
     - openshift-nmstate
 ---
+# Create NMState
 apiVersion: nmstate.io/v1
 kind: NMState
 metadata:
   name: nmstate
   namespace: openshift-nmstate
 ---
+# Setup NMState Operator
 apiVersion: operators.coreos.com/v1alpha1
 kind: Subscription
 metadata:
@@ -30,6 +34,7 @@ spec:
   sourceNamespace: openshift-marketplace
   installPlanApproval: Automatic
 ---
+# Configure IPs
 apiVersion: nmstate.io/v1
 kind: NodeNetworkConfigurationPolicy
 metadata:
