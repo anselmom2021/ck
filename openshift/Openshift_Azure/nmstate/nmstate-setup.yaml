@@ -3,12 +3,6 @@ kind: Namespace
 metadata:
   name: openshift-nmstate
 ---
-apiVersion: nmstate.io/v1
-kind: NMState
-metadata:
-  name: nmstate
-  namespace: openshift-nmstate
----
 apiVersion: operators.coreos.com/v1
 kind: OperatorGroup
 metadata:
@@ -17,6 +11,12 @@ metadata:
 spec:
   targetNamespaces:
     - openshift-nmstate
+---
+apiVersion: nmstate.io/v1
+kind: NMState
+metadata:
+  name: nmstate
+  namespace: openshift-nmstate
 ---
 apiVersion: operators.coreos.com/v1alpha1
 kind: Subscription
