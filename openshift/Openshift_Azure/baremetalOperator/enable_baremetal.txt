@@ -1,0 +1,5 @@
+oc edit clusterversion version
+
+—> add the operator on the following sections “additionalEnabledCapabilities:” e “enabledCapabilities:”
+
+Save and exit

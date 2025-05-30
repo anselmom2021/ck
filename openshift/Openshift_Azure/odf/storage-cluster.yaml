@@ -1,0 +1,30 @@
+apiVersion: ocs.openshift.io/v1
+kind: StorageCluster
+metadata:
+  name: ocs-storagecluster
+  namespace: openshift-storage
+spec:
+  manageNodes: false
+  monDataDirHostPath: /var/lib/rook
+  storageDeviceSets:
+    - name: nvme-deviceset
+      count: 1
+      portable: false
+      replica: 3
+      resources: {}
+      placement: {}
+      dataPVCTemplate:
+        spec:
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 1Ti
+          storageClassName: ""
+          volumeMode: Block
+          volumeName: ""
+      deviceSelector:
+        devicePaths:
+          - /dev/nvme1n1
+  nodeTopologies:
+    enabled: true

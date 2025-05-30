@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: odf-setup
+  namespace: openshift-gitops
+spec:
+  project: default
+  source:
+    repoURL: 'https://your-git-repo-url/your-org/your-repo.git'
+    targetRevision: HEAD
+    path: gitops/odf-setup
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: openshift-storage
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
