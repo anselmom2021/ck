@@ -1,0 +1,143 @@
+#
+# Note: This is a sample ApplianceConfig file showing
+# which fields are available to aid you in creating your
+# own appliance-config.yaml file.
+#
+apiVersion: v1beta1
+kind: ApplianceConfig
+
+ocpRelease:
+  # OCP release version in major.minor or major.minor.patch format
+  # (in case of major.minor, latest patch version will be used)
+  # If the specified version is not yet available, the latest supported version will be used.
+  # Supported versions: 4.14-4.19
+  version: 4.19
+
+  # OCP release update channel: stable|fast|eus|candidate
+  # Default: stable
+  # [Optional]
+  # channel: ocp-release-channel
+
+  # OCP release CPU architecture: x86_64|aarch64|ppc64le
+  # Default: x86_64
+  # [Optional]
+  # cpuArchitecture: cpu-architecture
+
+  # OCP release URL (use instead of channel/architecture)
+  # [Optional]
+  # url: ocp-release-url
+
+# Virtual size of the appliance disk image.
+# If specified, should be at least 150GiB.
+# If not specified, the disk image should be resized when 
+# cloning to a device (e.g. using virt-resize tool).
+# [Optional]
+# diskSizeGB: disk-size
+
+# PullSecret is required for mirroring the OCP release payload
+# Can be obtained from: https://console.redhat.com/openshift/install/pull-secret
+pullSecret: '{"auths":{"cloud.openshift.com":{"auth":"b3BlbnNoaWZ0LXJlbGVhc2UtZGV2K29jbV9hY2Nlc3NfOWNiMDIzNTc4ZmMzNGQ1Zjg0OWZhZjYwYmVhNDE1NGI6WkpOMDJKRVVRM0JHMjA1N0o1R1lSQURUMkMxTFFKNFRCVUVLQUdCNko1NjhMSFpQUlBKR05JU0xBUUwyMlFZQw==","email":"marco.anselmo@circlekeurope.com"},"quay.io":{"auth":"b3BlbnNoaWZ0LXJlbGVhc2UtZGV2K29jbV9hY2Nlc3NfOWNiMDIzNTc4ZmMzNGQ1Zjg0OWZhZjYwYmVhNDE1NGI6WkpOMDJKRVVRM0JHMjA1N0o1R1lSQURUMkMxTFFKNFRCVUVLQUdCNko1NjhMSFpQUlBKR05JU0xBUUwyMlFZQw==","email":"marco.anselmo@circlekeurope.com"},"registry.connect.redhat.com":{"auth":"fHVoYy1wb29sLWUyYWY3ZDVjLTIxOTktNDY0My1iY2FkLTI5YzMzNThhYjFhZDpleUpoYkdjaU9pSlNVelV4TWlKOS5leUp6ZFdJaU9pSmxaV0V5WWpOaFpqVmlNRFUwTVRKaVlUTTJabU01TnprMk1qUXpOREF4WVNKOS5mRXlyX0gyZDlOdlZhUnpiZzJ1aXlGUUtRTHd1Qk56M3dwcE90VmVQVkt1a2lqQUwzc0llUUhaVmZ3UTBLbUlJYmdONVpaaGZMUks0RE44dy1RbHJUZ01oYkg4MnFGT3hvSTFvN3FnWW84cllUZXJVVWN4X3doWGNTWDdrNzh3QUhQckpka3c0b2steUZPX21KOGFDNzc1VENlRjZobFF4UkU3NWk2YW5UV1lUQVQ1Rms4eVdGZDBBVHBlX1cyOTFySFg1ZGNRR0tIekRyRzhScmxLWXVTU3ZNN0tnLU9seERuTndPYjZQNWRzWTk5U1YxY2xJQlMzREhEUWxfMTBxNUpTQ3YydG16bzF2VV9fdTUwbkl5enJaRlJqYWM3VndoTkpNRUc3X1gtNFZUdlJWNVQxV1o4YTRqRzMyeExVVnlFaHlabm1GMm52VTBQZVpKOW5qbkZMTUtwNUh5MEI4ekQ1MzFvTzU4SUc3Vzl2TTN3MWl3eFdOZmQzSDhQbU5kalBWbkZVVVd4WGRfb1MyOTNVMGQwanpBTXlmT0dpNmlNd1JTVy1UcG44aFdGVXFsSHFvNTZXamdXeV9JVVI0T1B2dmIyel9PUFhrMlROdFFNSFFfQTBnNk1wbW04MEFuZFY5UjVPTl82d3BNandiZ2h6OGRGV2Y2TW1lQmd6ZHdERzFkTFhqYWlDMF91TWppSmVtYVZ6UjZBRnpsSzM0NGpNZVRhQ3VwZ21NYzlzVmVHY0FrYjJTRXh1R281dXJIZjlRS2xPay1hOG9IWFFzS3hHU2lKcGl2MW9aaWljYTVnNVJMR05mYlZHYjMzLXpHd0s3eF96WXF1cUJVRkNhYVdZZzZHbGE4RTNwVTd0RkFPVVFrUXh5UE04N2k5dzVwajFuMWZOcDc0TQ==","email":"marco.anselmo@circlekeurope.com"},"registry.redhat.io":{"auth":"fHVoYy1wb29sLWUyYWY3ZDVjLTIxOTktNDY0My1iY2FkLTI5YzMzNThhYjFhZDpleUpoYkdjaU9pSlNVelV4TWlKOS5leUp6ZFdJaU9pSmxaV0V5WWpOaFpqVmlNRFUwTVRKaVlUTTJabU01TnprMk1qUXpOREF4WVNKOS5mRXlyX0gyZDlOdlZhUnpiZzJ1aXlGUUtRTHd1Qk56M3dwcE90VmVQVkt1a2lqQUwzc0llUUhaVmZ3UTBLbUlJYmdONVpaaGZMUks0RE44dy1RbHJUZ01oYkg4MnFGT3hvSTFvN3FnWW84cllUZXJVVWN4X3doWGNTWDdrNzh3QUhQckpka3c0b2steUZPX21KOGFDNzc1VENlRjZobFF4UkU3NWk2YW5UV1lUQVQ1Rms4eVdGZDBBVHBlX1cyOTFySFg1ZGNRR0tIekRyRzhScmxLWXVTU3ZNN0tnLU9seERuTndPYjZQNWRzWTk5U1YxY2xJQlMzREhEUWxfMTBxNUpTQ3YydG16bzF2VV9fdTUwbkl5enJaRlJqYWM3VndoTkpNRUc3X1gtNFZUdlJWNVQxV1o4YTRqRzMyeExVVnlFaHlabm1GMm52VTBQZVpKOW5qbkZMTUtwNUh5MEI4ekQ1MzFvTzU4SUc3Vzl2TTN3MWl3eFdOZmQzSDhQbU5kalBWbkZVVVd4WGRfb1MyOTNVMGQwanpBTXlmT0dpNmlNd1JTVy1UcG44aFdGVXFsSHFvNTZXamdXeV9JVVI0T1B2dmIyel9PUFhrMlROdFFNSFFfQTBnNk1wbW04MEFuZFY5UjVPTl82d3BNandiZ2h6OGRGV2Y2TW1lQmd6ZHdERzFkTFhqYWlDMF91TWppSmVtYVZ6UjZBRnpsSzM0NGpNZVRhQ3VwZ21NYzlzVmVHY0FrYjJTRXh1R281dXJIZjlRS2xPay1hOG9IWFFzS3hHU2lKcGl2MW9aaWljYTVnNVJMR05mYlZHYjMzLXpHd0s3eF96WXF1cUJVRkNhYVdZZzZHbGE4RTNwVTd0RkFPVVFrUXh5UE04N2k5dzVwajFuMWZOcDc0TQ==","email":"marco.anselmo@circlekeurope.com"}}}'
+
+# Public SSH key for accessing the appliance during the bootstrap phase
+# [Optional]
+sshKey: 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDEXGhRltP+ApcazuOsCrYBRnxegLLLOAYYHsAjJej45vD6DWXeFsq/v1CrsE9l/HR/9c2y8KzB2bV+iPZnRnbfIiKX9rxeYkyuya4Utpc6zMG48GwAoS6A1MPy11bK20hHpuLVEe+YbJAMXyqPdCtiN/7asGfJhmucBBg8RiVynBhmDoZ921shQ6T0Qm4ay/ZlOom11tSCayAGy59Cdvyzm34dSiPg1xtp1pyPMLcH4r6OpQ4Te3JpNc84VIykZQYFAGQJ/dFnlWmZCYLOITHkfam5m/rD5vRlyLS9w8v4Ryff0YbJIYgpMOLIpC+oQvzhDY4xw2RShRuIjHMoPVjJ marcoanselmo@EDF-PF1KRSPD'
+
+# Password of user 'core' for connecting from console
+# [Optional]
+userCorePass: Admin@Circlek2025
+
+# Local image registry details (used when building the appliance)
+# Note: building an image internally by default.
+# [Optional]
+# imageRegistry:
+  # The URI for the image
+  # Default: ""
+  # Examples: 
+  # - docker.io/library/registry:2
+  # - quay.io/libpod/registry:2.8
+  # [Optional]
+  # uri: uri
+  # The image registry container TCP port to bind. A valid port number is between 1024 and 65535.
+  # Default: 5005
+  # [Optional]
+  # port: port
+
+# Enable all default CatalogSources (on openshift-marketplace namespace).
+# Should be disabled for disconnected environments.
+# Default: false
+# [Optional]
+# enableDefaultSources: false
+
+# Stop the local registry post cluster installation.
+# Note that additional images and operators won't be available when stopped.
+# Default: false
+# [Optional]
+stopLocalRegistry: false
+
+# Create PinnedImageSets for both the master and worker MCPs.
+# The PinnedImageSets will include all the images included in the appliance disk image.
+# Requires openshift version 4.16 or above.
+# WARNING: 
+# As of 4.18, PinnedImageSets feature is still not GA.
+# Thus, enabling it will set the cluster to tech preview,
+# which means the cluster cannot be upgraded
+# (i.e. should only be used for testing purposes).
+# Default: false
+# [Optional]
+# createPinnedImageSets: false
+
+# Enable FIPS mode for the cluster.
+# Note: 'fips' should be enabled also in install-config.yaml.
+# Default: false
+# [Optional]
+# enableFips: false
+
+# Enable the interactive installation flow.
+# Should be enabled to provide cluster configuration through the web UI
+# (i.e. instead of using a config-image).
+# Default: false
+# [Optional]
+# enableInteractiveFlow: false
+
+# Rename CatalogSource names generated by oc-mirror to the default naming.
+# E.g. 'redhat-operators' instead of 'cs-redhat-operator-index-v4-19'.
+# Default: false
+# [Optional]
+# useDefaultSourceNames: false
+
+# Additional images to be included in the appliance disk image.
+# [Optional]
+# additionalImages:
+#   - name: image-url
+
+# Images to avoid including in the appliance disk image (by name or regular expression).
+# [Optional]
+# blockedImages:
+#   - name: image-url
+
+# Operators to be included in the appliance disk image.
+# See examples in https://github.com/openshift/oc-mirror/blob/main/docs/imageset-config-ref.yaml.
+# [Optional]
+# operators:
+# - catalog: catalog-uri
+#   packages:
+#     - name: package-name
+#       channels:
+#         - name: channel-name
+operators:
+  - catalog: registry.redhat.io/redhat/redhat-operator-index:v4.19
+    packages:
+      - name: kubevirt-hyperconverged
+      - name: local-storage-operator
+      - name: kubernetes-nmstate-operator
+      - name: cephcsi-operator
+      - name: mcg-operator
+      - name: ocs-client-operator
+      - name: ocs-operator
+      - name: odf-csi-addons-operator
+      - name: odf-dependencies
+      - name: odf-multicluster-orchestrator
+      - name: odf-operator
+      - name: odf-prometheus-operator
+      - name: recipe
+      - name: rook-ceph-operator

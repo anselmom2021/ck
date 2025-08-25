@@ -1,0 +1,228 @@
+kind: Template
+apiVersion: template.openshift.io/v1
+metadata:
+  name: windows10-circlek-poc
+  namespace: openshift
+  labels:
+    app.kubernetes.io/component: templating
+    app.kubernetes.io/managed-by: ssp-operator
+    app.kubernetes.io/name: common-templates
+    app.kubernetes.io/part-of: hyperconverged-cluster
+    app.kubernetes.io/version: 4.18.8
+    flavor.template.kubevirt.io/medium: 'true'
+    os.template.kubevirt.io/win10: 'true'
+    template.kubevirt.io/architecture: amd64
+    template.kubevirt.io/default-os-variant: 'true'
+    template.kubevirt.io/type: base
+    template.kubevirt.io/version: v0.32.2
+    workload.template.kubevirt.io/desktop: 'true'
+  annotations:
+    defaults.template.kubevirt.io/disk: rootdisk
+    defaults.template.kubevirt.io/network: default
+    description: Template for CircleK Windows 10 VM. A PVC with the Windows disk image must be available.
+    iconClass: icon-windows
+    name.os.template.kubevirt.io/win10: Microsoft Windows 10
+    openshift.io/display-name: Microsoft Windows 10 VM
+    openshift.io/documentation-url: 'https://github.com/kubevirt/common-templates'
+    openshift.io/provider-display-name: CircleK
+    openshift.kubevirt.io/pronounceable-suffix-for-name-expression: 'true'
+    operator-sdk/primary-resource: openshift-cnv/ssp-kubevirt-hyperconverged
+    tags: 'hidden,kubevirt,virtualmachine,windows'
+    template.kubevirt.io/editable: |
+      /objects[0].spec.template.spec.domain.cpu.cores
+      /objects[0].spec.template.spec.domain.memory.guest
+      /objects[0].spec.template.spec.domain.devices.disks
+      /objects[0].spec.template.spec.volumes
+      /objects[0].spec.template.spec.networks
+    template.kubevirt.io/provider: CircleK
+    template.kubevirt.io/provider-support-level: Full
+    template.kubevirt.io/version: v1alpha1
+    template.openshift.io/bindable: 'false'
+  managedFields:
+    - manager: manager
+      operation: Update
+      apiVersion: template.openshift.io/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:metadata':
+          'f:annotations':
+            'f:openshift.io/support-url': {}
+            'f:operator-sdk/primary-resource-type': {}
+            'f:template.kubevirt.io/provider-url': {}
+    - manager: Mozilla
+      operation: Update
+      apiVersion: template.openshift.io/v1
+      fieldsType: FieldsV1
+      fieldsV1:
+        'f:metadata':
+          'f:annotations':
+            .: {}
+            'f:defaults.template.kubevirt.io/disk': {}
+            'f:defaults.template.kubevirt.io/network': {}
+            'f:description': {}
+            'f:iconClass': {}
+            'f:name.os.template.kubevirt.io/win10': {}
+            'f:openshift.io/display-name': {}
+            'f:openshift.io/documentation-url': {}
+            'f:openshift.io/provider-display-name': {}
+            'f:openshift.kubevirt.io/pronounceable-suffix-for-name-expression': {}
+            'f:operator-sdk/primary-resource': {}
+            'f:tags': {}
+            'f:template.kubevirt.io/editable': {}
+            'f:template.kubevirt.io/provider': {}
+            'f:template.kubevirt.io/provider-support-level': {}
+            'f:template.kubevirt.io/version': {}
+            'f:template.openshift.io/bindable': {}
+          'f:labels':
+            .: {}
+            'f:app.kubernetes.io/component': {}
+            'f:app.kubernetes.io/managed-by': {}
+            'f:app.kubernetes.io/name': {}
+            'f:app.kubernetes.io/part-of': {}
+            'f:app.kubernetes.io/version': {}
+            'f:flavor.template.kubevirt.io/medium': {}
+            'f:os.template.kubevirt.io/win10': {}
+            'f:template.kubevirt.io/architecture': {}
+            'f:template.kubevirt.io/default-os-variant': {}
+            'f:template.kubevirt.io/type': {}
+            'f:template.kubevirt.io/version': {}
+            'f:workload.template.kubevirt.io/desktop': {}
+        'f:objects': {}
+        'f:parameters': {}
+objects:
+  - apiVersion: kubevirt.io/v1
+    kind: VirtualMachine
+    metadata:
+      annotations:
+        vm.kubevirt.io/validations: |
+          [
+            {
+              "name": "windows-virtio-bus",
+              "path": "jsonpath::.spec.domain.devices.disks[*].disk.bus",
+              "valid": "jsonpath::.spec.domain.devices.disks[*].disk.bus",
+              "rule": "enum",
+              "message": "virtio disk bus type has better performance, install virtio drivers in VM and change bus type",
+              "values": ["virtio"],
+              "justWarning": true
+            }, {
+              "name": "windows-disk-bus",
+              "path": "jsonpath::.spec.domain.devices.disks[*].disk.bus",
+              "valid": "jsonpath::.spec.domain.devices.disks[*].disk.bus",
+              "rule": "enum",
+              "message": "disk bus has to be either virtio or sata or scsi",
+              "values": ["virtio", "sata", "scsi"]
+            }, {
+              "name": "windows-cd-bus",
+              "path": "jsonpath::.spec.domain.devices.disks[*].cdrom.bus",
+              "valid": "jsonpath::.spec.domain.devices.disks[*].cdrom.bus",
+              "rule": "enum",
+              "message": "cd bus has to be sata",
+              "values": ["sata"]
+            }
+          ]
+      labels:
+        app: '${NAME}'
+        vm.kubevirt.io/template: windows10-desktop-medium
+        vm.kubevirt.io/template.revision: '1'
+        vm.kubevirt.io/template.version: v0.32.2
+      name: '${NAME}'
+    spec:
+      dataVolumeTemplates:
+        - apiVersion: cdi.kubevirt.io/v1beta1
+          kind: DataVolume
+          metadata:
+            name: '${NAME}'
+          spec:
+            sourceRef:
+              kind: DataSource
+              name: '${DATA_SOURCE_NAME}'
+              namespace: '${DATA_SOURCE_NAMESPACE}'
+            storage:
+              resources:
+                requests:
+                  storage: 256Gi
+      runStrategy: Halted
+      template:
+        metadata:
+          annotations:
+            vm.kubevirt.io/flavor: custom
+            vm.kubevirt.io/os: windows10
+            vm.kubevirt.io/workload: desktop
+          labels:
+            kubevirt.io/domain: '${NAME}'
+            kubevirt.io/size: custom
+        spec:
+          architecture: amd64
+          domain:
+            clock:
+              timer:
+                hpet:
+                  present: false
+                hyperv: {}
+                pit:
+                  tickPolicy: delay
+                rtc:
+                  tickPolicy: catchup
+              utc: {}
+            cpu:
+              cores: 1
+              sockets: 4
+              threads: 1
+            devices:
+              disks:
+                - disk:
+                    bus: sata
+                  name: rootdisk
+              inputs:
+                - bus: usb
+                  name: tablet
+                  type: tablet
+              interfaces:
+                - masquerade: {}
+                  model: e1000e
+                  name: default
+            features:
+              acpi: {}
+              apic: {}
+              hyperv:
+                reenlightenment: {}
+                ipi: {}
+                synic: {}
+                synictimer:
+                  direct: {}
+                spinlocks:
+                  spinlocks: 8191
+                reset: {}
+                relaxed: {}
+                vpindex: {}
+                runtime: {}
+                tlbflush: {}
+                frequencies: {}
+                vapic: {}
+              smm: {}
+            firmware:
+              bootloader:
+                efi:
+                  secureBoot: true
+            memory:
+              guest: 12Gi
+            networks:
+              - multus:
+                  networkName: default/payment-ntw
+                name: payment-network-ip
+          terminationGracePeriodSeconds: 30
+          volumes:
+            - dataVolume:
+                name: '${NAME}'
+              name: rootdisk
+parameters:
+  - name: NAME
+    description: VM name
+    generate: expression
+    from: 'windows10-[a-z0-9]{6}'
+  - name: DATA_SOURCE_NAME
+    description: Name of the DataSource to clone
+    value: win10
+  - name: DATA_SOURCE_NAMESPACE
+    description: Namespace of the DataSource
+    value: openshift-virtualization-os-images

@@ -57,37 +57,34 @@ spec:
 apiVersion: nmstate.io/v1
 kind: NodeNetworkConfigurationPolicy
 metadata:
-  name: nmstate-static-ip-node2
+  name: br-enp3s0f1-pay
 spec:
-  nodeSelector:
-    kubernetes.io/hostname: n2
   desiredState:
     interfaces:
-      - name: enp3s0f1
-        type: ethernet
-        state: up
+      - bridge:
+          options:
+            stp:
+              enabled: false
+          port:
+            - name: enp3s0f1
         ipv4:
-          enabled: true
-          address:
-            - ip: 10.255.253.3
-              prefix-length: 29
           dhcp: false
+          enabled: false
+        name: br-pay
+        state: up
+        type: linux-bridge
 ---
-apiVersion: nmstate.io/v1
-kind: NodeNetworkConfigurationPolicy
+apiVersion: "k8s.cni.cncf.io/v1"
+kind: NetworkAttachmentDefinition
 metadata:
-  name: nmstate-static-ip-node3
+  name: external-network
+  namespace: default
 spec:
-  nodeSelector:
-    kubernetes.io/hostname: n3
-  desiredState:
-    interfaces:
-      - name: enp3s0f1
-        type: ethernet
-        state: up
-        ipv4:
-          enabled: true
-          address:
-            - ip: 10.255.253.4
-              prefix-length: 29
-          dhcp: false
+  config: |
+    {
+      "cniVersion": "0.3.1",
+      "type": "macvlan",
+      "master": "br-pay",
+      "mode": "bridge",
+      "ipam": {}
+    }

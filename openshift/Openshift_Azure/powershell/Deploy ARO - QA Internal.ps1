@@ -96,3 +96,6 @@ az aro create --resource-group $ARO_RG --name $ARO_Name --vnet $ARO_VNetName `
 
 # ARO Clusters are not automatically added to the Red Hat Console:
 #Start-Process https://console.redhat.com/openshift/
+
+# Delete the ARO cluster
+#az aro delete --resource-group $ARO_RG --name $ARO_Name
